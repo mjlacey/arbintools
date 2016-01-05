@@ -97,9 +97,9 @@ arbin_plotvp <- function(data, cycles) {
   # the dplyr package.) Checks first what format the data is in. If it sees
   # a list it assumes it should use the 'raw' data frame.
   if (class(data) == "list") {
-    plotted.data <- filter(data$raw, cyc.n %in% cycles)
+    plotted.data <- filter(data$raw, cyc.n %in% cycles, I != 0)
   } else if (class(data) == "data.frame") {
-    plotted.data <- filter(data, cyc.n %in% cycles)
+    plotted.data <- filter(data, cyc.n %in% cycles, I != 0)
   } else {
     stop("Data doesn't seem to be in a recognisable format! Was it imported with
          the arbin_import functions?")
