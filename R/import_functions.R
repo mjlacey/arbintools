@@ -1,3 +1,5 @@
+require(readxl, quietly = TRUE)
+
 ### Importing functions
 
 #' arbin_import

@@ -1,3 +1,8 @@
+require(dplyr, quietly = TRUE)
+require(ggplot2, quietly = TRUE)
+require(scales, quietly = TRUE)
+require(grid, quietly = TRUE)
+
 ### Plotting functions. The plotting functions here include arbin_quickplot,
 ### for quickly plotting any x or y variable; arbin_plotvp, for plotting voltage
 ### profiles, and arbin_qplot, for plotting capacity vs cycle number with
@@ -56,7 +61,9 @@ arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
   p <- p + xlab(labels[[x]]) + ylab(labels[[y]])
   
   # If scales and grid are installed, then a custom theme is added.
-  if(requireNamespace("scales", quietly = TRUE) & requireNamespace("grid", quietly = TRUE)) {
+  # This does not seem to work as I thought so it's cut out for now, and scales
+  # and grid are required packages.
+#  if(!requireNamespace("scales") == FALSE | !requireNamespace("grid") == FALSE) {
     p <- p + theme_bw() +
       theme(text = element_text(size=21)) +
       theme(axis.title.x = element_text(vjust=-0.3)) +
@@ -71,7 +78,7 @@ arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
       p <- p + scale_y_continuous(limits=c(0, max(data[y])))
     }
     
-  }
+#  }
   
   return(p)
   
@@ -131,7 +138,9 @@ arbin_plotvp <- function(data, cycles) {
     guides(color = guide_legend(title = "cycle"))
   
   # If scales and grid are installed, then a custom theme is added.
-  if (requireNamespace("scales", quietly = TRUE) & requireNamespace("grid", quietly = TRUE)) {
+  # This does not seem to work as I thought so it's cut out for now, and scales
+  # and grid are required packages.
+#  if (requireNamespace("scales", quietly = TRUE) & requireNamespace("grid", quietly = TRUE)) {
     p <- p + theme_bw() +
       theme(text = element_text(size=21)) +
       theme(axis.title.x = element_text(vjust=-0.3)) +
@@ -139,7 +148,7 @@ arbin_plotvp <- function(data, cycles) {
       theme(panel.border = element_rect(size=1,color = "black")) +
       theme(axis.ticks.length=unit(-0.25, "cm"), axis.ticks.margin=unit(0.5, "cm")) +
       theme(panel.grid.major = element_line(size=0.5))
-  }
+#  }
   
   return(p)
   
@@ -187,7 +196,9 @@ arbin_Qplot <- function(list, labels) {
   
   # If scales and grid are installed, then a custom theme is added. y-axis is
   # also rescaled.
-  if(requireNamespace("scales", quietly = TRUE) & requireNamespace("grid", quietly = TRUE)) {
+  # This does not seem to work as I thought so it's cut out for now, and scales
+  # and grid are required packages.
+#  if(!requireNamespace("scales") == FALSE | !requireNamespace("grid") == FALSE) {
     p <- p + theme_bw() +
       theme(text = element_text(size=21)) +
       theme(axis.title.x = element_text(vjust=-0.3)) +
@@ -197,7 +208,7 @@ arbin_Qplot <- function(list, labels) {
       theme(panel.grid.major = element_line(size=0.5))
     
     p <- p + scale_y_continuous(limits=c(0, max(stats$Q.d)))
-  }
+#  }
   
   return(p)
   
