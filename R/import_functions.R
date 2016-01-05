@@ -1,5 +1,3 @@
-require(readxl, quietly = TRUE)
-
 ### Importing functions
 
 #' arbin_import
@@ -25,6 +23,8 @@ require(readxl, quietly = TRUE)
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
 
 arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, meanE = FALSE) {
+  
+  require(readxl)
   
   # All the "Channel*" sheets are read in. This function needs the readxl package.
   l <- lapply(grep("Channel*", excel_sheets(file), value = TRUE), 
@@ -109,6 +109,8 @@ arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, ma
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE)
 
 arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE) {
+  
+  require(readxl, quietly = TRUE)
   
   l <- lapply(grep("Channel*", excel_sheets(file), value = TRUE), 
               read_excel, path = file)

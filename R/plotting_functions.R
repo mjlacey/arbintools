@@ -1,8 +1,3 @@
-require(dplyr, quietly = TRUE)
-require(ggplot2, quietly = TRUE)
-require(scales, quietly = TRUE)
-require(grid, quietly = TRUE)
-
 ### Plotting functions. The plotting functions here include arbin_quickplot,
 ### for quickly plotting any x or y variable; arbin_plotvp, for plotting voltage
 ### profiles, and arbin_qplot, for plotting capacity vs cycle number with
@@ -27,6 +22,11 @@ require(grid, quietly = TRUE)
 #' arbin_quickplot(mydataset$stat, x = cyc.n, y = d.Q)
 
 arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
+  
+  require(ggplot2)
+  require(scales)
+  require(grid)
+  require(dplyr)
   
   # the x and y arguments are converted to strings so that they can
   # be evaluated correctly by ggplot using aes_string().
@@ -100,6 +100,11 @@ arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
 
 arbin_plotvp <- function(data, cycles) {
   
+  require(ggplot2)
+  require(scales)
+  require(grid)
+  require(dplyr)
+  
   # Data for the specified cycles is filtered off (uses filter() from
   # the dplyr package.) Checks first what format the data is in. If it sees
   # a list it assumes it should use the 'raw' data frame.
@@ -168,6 +173,11 @@ arbin_plotvp <- function(data, cycles) {
 #' arbin_Qplot(list(mydatasetA, mydatasetB), labels = c("dataset A", "dataset B"))
 
 arbin_Qplot <- function(list, labels) {
+  
+  require(ggplot2)
+  require(scales)
+  require(grid)
+  require(dplyr)
   
   # Check that there are the same number of datasets as labels, and stop if not.
   if (length(list) != length(labels)) {
