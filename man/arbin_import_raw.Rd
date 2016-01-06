@@ -4,7 +4,7 @@
 \alias{arbin_import_raw}
 \title{arbin_import_raw}
 \usage{
-arbin_import_raw(file, step.time = TRUE, energy = TRUE)
+arbin_import_raw(file, step.time = TRUE, energy = TRUE, mass = NULL)
 }
 \arguments{
 \item{file}{The filename, which must end in .xls or .xlsx.}
@@ -12,6 +12,9 @@ arbin_import_raw(file, step.time = TRUE, energy = TRUE)
 \item{step.time}{Defaults to TRUE. Includes the step time variable from the data file if TRUE.}
 
 \item{energy}{Defaults to TRUE. Includes the (dis)charge energy variables from the data file if TRUE.}
+
+\item{mass}{Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
+capacities in the raw and statistics data frames will be converted to mAh/g.}
 }
 \description{
 This function is a simplified version of arbin_import which does not output a separate

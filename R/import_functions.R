@@ -102,13 +102,15 @@ arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, ma
 #' @param file The filename, which must end in .xls or .xlsx.
 #' @param step.time Defaults to TRUE. Includes the step time variable from the data file if TRUE.
 #' @param energy Defaults to TRUE. Includes the (dis)charge energy variables from the data file if TRUE.
+#' @param mass Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
+#' capacities in the raw and statistics data frames will be converted to mAh/g.
 #' @keywords
 #' @export
 #' @examples 
 #' mydataset <- arbin_import("dataset.xlsx")
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE)
 
-arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE) {
+arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE, mass = NULL) {
   
   require(readxl, quietly = TRUE)
   
