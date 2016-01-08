@@ -133,8 +133,8 @@ arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE, mass = NULL)
   }
   
   if(energy == TRUE) {
-    x$E.d <- l$`Discharge_Energy(Wh)` # discharge energy (Wh)
-    x$E.c <- l$`Charge_Energy(Wh)` # charge energy (Wh)
+    x$En.d <- l$`Discharge_Energy(Wh)` # discharge energy (Wh)
+    x$En.c <- l$`Charge_Energy(Wh)` # charge energy (Wh)
   }
   
   # Capacities are converted to mAh/g if active mass is specified.
