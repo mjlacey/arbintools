@@ -66,12 +66,10 @@ arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
 #  if(!requireNamespace("scales") == FALSE | !requireNamespace("grid") == FALSE) {
     p <- p + theme_bw() +
       theme(text = element_text(size=21)) +
-      theme(axis.title.x = element_text(vjust=-0.3)) +
-      theme(axis.title.y = element_text(vjust=0.8)) +
       theme(panel.border = element_rect(size=1,color = "black")) +
       theme(axis.ticks.length=unit(-0.25, "cm")) +
-      theme(axis.text.x = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
-      theme(axis.text.y = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
+      theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
+      theme(axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"))) +
       theme(panel.grid.major = element_line(size=0.5))
     
     # If the y-axis shows capacity, the plot is rescaled from 0 to max capacity.
@@ -150,12 +148,10 @@ arbin_plotvp <- function(data, cycles) {
 #  if (requireNamespace("scales", quietly = TRUE) & requireNamespace("grid", quietly = TRUE)) {
     p <- p + theme_bw() +
       theme(text = element_text(size=21)) +
-      theme(axis.title.x = element_text(vjust=-0.3)) +
-      theme(axis.title.y = element_text(vjust=0.8)) +
       theme(panel.border = element_rect(size=1,color = "black")) +
       theme(axis.ticks.length=unit(-0.25, "cm")) +
-      theme(axis.text.x = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
-      theme(axis.text.y = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
+      theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
+      theme(axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"))) +
       theme(panel.grid.major = element_line(size=0.5))
 #  }
   
@@ -215,12 +211,10 @@ arbin_Qplot <- function(list, labels) {
 #  if(!requireNamespace("scales") == FALSE | !requireNamespace("grid") == FALSE) {
     p <- p + theme_bw() +
       theme(text = element_text(size=21)) +
-      theme(axis.title.x = element_text(vjust=-0.3)) +
-      theme(axis.title.y = element_text(vjust=0.8)) +
       theme(panel.border = element_rect(size=1,color = "black")) +
       theme(axis.ticks.length=unit(-0.25, "cm")) +
-      theme(axis.text.x = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
-      theme(axis.text.y = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
+      theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
+      theme(axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"))) +
       theme(panel.grid.major = element_line(size=0.5))
     
     p <- p + scale_y_continuous(limits=c(0, max(stats$Q.d)))
