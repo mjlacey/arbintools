@@ -69,7 +69,9 @@ arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
       theme(axis.title.x = element_text(vjust=-0.3)) +
       theme(axis.title.y = element_text(vjust=0.8)) +
       theme(panel.border = element_rect(size=1,color = "black")) +
-      theme(axis.ticks.length=unit(-0.25, "cm"), axis.ticks.margin=unit(0.5, "cm")) +
+      theme(axis.ticks.length=unit(-0.25, "cm")) +
+      theme(axis.text.x = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
+      theme(axis.text.y = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
       theme(panel.grid.major = element_line(size=0.5))
     
     # If the y-axis shows capacity, the plot is rescaled from 0 to max capacity.
@@ -151,7 +153,9 @@ arbin_plotvp <- function(data, cycles) {
       theme(axis.title.x = element_text(vjust=-0.3)) +
       theme(axis.title.y = element_text(vjust=0.8)) +
       theme(panel.border = element_rect(size=1,color = "black")) +
-      theme(axis.ticks.length=unit(-0.25, "cm"), axis.ticks.margin=unit(0.5, "cm")) +
+      theme(axis.ticks.length=unit(-0.25, "cm")) +
+      theme(axis.text.x = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
+      theme(axis.text.y = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
       theme(panel.grid.major = element_line(size=0.5))
 #  }
   
@@ -214,7 +218,9 @@ arbin_Qplot <- function(list, labels) {
       theme(axis.title.x = element_text(vjust=-0.3)) +
       theme(axis.title.y = element_text(vjust=0.8)) +
       theme(panel.border = element_rect(size=1,color = "black")) +
-      theme(axis.ticks.length=unit(-0.25, "cm"), axis.ticks.margin=unit(0.5, "cm")) +
+      theme(axis.ticks.length=unit(-0.25, "cm")) +
+      theme(axis.text.x = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
+      theme(axis.text.y = element_text(margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))) +
       theme(panel.grid.major = element_line(size=0.5))
     
     p <- p + scale_y_continuous(limits=c(0, max(stats$Q.d)))
