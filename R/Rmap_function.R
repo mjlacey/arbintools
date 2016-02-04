@@ -31,10 +31,6 @@ arbin_process_Rmap <- function(data.in) {
           " rows, so this is estimated to take around ", round(3.14E-5 * nrow(raw), digits = 1),
           " seconds to complete.")
 
-  # Some simplified functions
-  stail <- function(x) x[length(x)] # Simplified tail() function
-  shead <- function(x) x[1] # Simplified head() function
-
   # Assign the sign of the current as the "state".
   message("importing and filtering data... ", appendLF = FALSE)
   raw$state <- signCurrent(raw$I)
@@ -72,21 +68,21 @@ arbin_process_Rmap <- function(data.in) {
     out <- data.frame(
       rest = unique(cycle$rests),
       state = sapply(unique(cycle$rests), function(i) {
-        stail(cycle$state[cycle$rests == i & cycle$state != "R"])
+        last(cycle$state[cycle$rests == i & cycle$state != "R"])
       }),
       cyc.n = sapply(unique(cycle$rests), function(i) {
-        stail(cycle$cyc.n[cycle$rests == i])
+        last(cycle$cyc.n[cycle$rests == i])
       }),
       Q = sapply(unique(cycle$rests), function(i) {
-        stail(cycle$adjQ[cycle$rests == i])
+        last(cycle$adjQ[cycle$rests == i])
       }),
       E = sapply(unique(cycle$rests), function(i) {
-        stail(cycle$E[cycle$rests == i & cycle$state != "R"])
+        last(cycle$E[cycle$rests == i & cycle$state != "R"])
       }),
       R = sapply(unique(cycle$rests), function(i) {
-        (stail(cycle$E[cycle$rests == i & cycle$state == "R"]) -
-           stail(cycle$E[cycle$rests == i & cycle$state != "R"])) /
-          (-1 * stail(cycle$I[cycle$rests == i & cycle$state != "R"]))
+        (last(cycle$E[cycle$rests == i & cycle$state == "R"]) -
+           last(cycle$E[cycle$rests == i & cycle$state != "R"])) /
+          (-1 * last(cycle$I[cycle$rests == i & cycle$state != "R"]))
       })
     )
     return(out)
