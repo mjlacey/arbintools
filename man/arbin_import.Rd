@@ -34,4 +34,5 @@ sheet as outputted to the Excel file is not read.
 mydataset <- arbin_import("dataset.xlsx")
 mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
 }
+\keyword{import}
 
