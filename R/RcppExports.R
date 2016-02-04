@@ -11,7 +11,7 @@
 #' @examples
 #' raw$state <- signCurrent(raw$I)
 signCurrent <- function(x) {
-    .Call('signCurrent', PACKAGE = 'arbintools', x)
+    .Call('arbintools_signCurrent', PACKAGE = 'arbintools', x)
 }
 
 #' assignRest
@@ -24,6 +24,6 @@ signCurrent <- function(x) {
 #' @examples
 #' raw$rests <- assignRest(raw$state)
 assignRest <- function(x) {
-    .Call('assignRest', PACKAGE = 'arbintools', x)
+    .Call('arbintools_assignRest', PACKAGE = 'arbintools', x)
 }
 
