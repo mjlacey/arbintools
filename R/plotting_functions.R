@@ -21,7 +21,7 @@
 #' arbin_quickplot(filter(mydataset$raw, cyc.n == 1, x = t, y = E, geom = geom_path, size = 1)
 #' arbin_quickplot(mydataset$stat, x = cyc.n, y = d.Q)
 
-arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
+arbin_quickplot <- function(data, x, y, geom = geom_point, size = 3) {
   
   require(ggplot2)
   require(scales)
@@ -60,20 +60,6 @@ arbin_quickplot <- function(data, x, y, geom = geom_point, size = 4) {
   # Labels looked up from the list of labels. ========================
   p <- p + xlab(labels[[x]]) + ylab(labels[[y]])
   
-  # If scales and grid are installed, then a custom theme is added.
-  # This does not seem to work as I thought so it's cut out for now, and scales
-  # and grid are required packages.
-#  if(!requireNamespace("scales") == FALSE | !requireNamespace("grid") == FALSE) {
-    p <- p + theme_bw() +
-      theme(text = element_text(size=21)) +
-      theme(panel.border = element_rect(size=1,color = "black")) +
-      theme(axis.ticks.length=unit(-0.25, "cm")) +
-      theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
-      theme(axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"))) +
-      theme(panel.grid.major = element_line(size=0.5))
-    
-    # If the y-axis shows capacity, the plot is rescaled from 0 to max capacity.
-    # Also requires the scales package.
     if(y %in% c("Q.c", "Q.d")) {
       p <- p + scale_y_continuous(limits=c(0, max(data[y])))
     }
@@ -117,22 +103,11 @@ arbin_plotvp <- function(data, cycles) {
          the arbin_import functions?")
   }
   
-  # The function tries to guess whether the discharge or charge
-  # step is first in the cycle. This affects correct plotting.
-  for (i in unique(plotted.data$step.n)) {
-    testI <- mean(plotted.data$I[plotted.data$step.n == i])
-    
-    if (testI == 0) {
-    } else if (testI < 0) {
-      plotted.data$Q.d[plotted.data$Q.c != 0] <- NA
-      plotted.data$Q.c[plotted.data$Q.d != 0] <- NA
-      break
-    } else if (testI > 0) {
-      plotted.data$Q.c[plotted.data$Q.d != 0] <- NA
-      plotted.data$Q.d[plotted.data$Q.c != 0] <- NA
-      break
-    }
-  }
+  # Replaces data points for charge capacity while the cell is discharging, and vice versa.
+  # Alternative is possibly using reshape2::melt() and group but I've not looked into it.
+  
+  plotted.data$Q.c[plotted.data$step.n == unique(plotted.data$step.n[which(plotted.data$I < 0)])] <- NA
+  plotted.data$Q.d[plotted.data$step.n == unique(plotted.data$step.n[which(plotted.data$I > 0)])] <- NA
   
   # Basic plot setup. =============================================
   p <- ggplot(plotted.data) +
@@ -142,27 +117,14 @@ arbin_plotvp <- function(data, cycles) {
     ylab("cell voltage / V") +
     guides(color = guide_legend(title = "cycle"))
   
-  # If scales and grid are installed, then a custom theme is added.
-  # This does not seem to work as I thought so it's cut out for now, and scales
-  # and grid are required packages.
-#  if (requireNamespace("scales", quietly = TRUE) & requireNamespace("grid", quietly = TRUE)) {
-    p <- p + theme_bw() +
-      theme(text = element_text(size=21)) +
-      theme(panel.border = element_rect(size=1,color = "black")) +
-      theme(axis.ticks.length=unit(-0.25, "cm")) +
-      theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
-      theme(axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"))) +
-      theme(panel.grid.major = element_line(size=0.5))
-#  }
-  
   return(p)
   
 }
 
-
 #' arbin_Qplot
 #' 
-#' This function takes a list of datasets, a vector of labels for those datasets and
+#' This function takes a list of datasets, a vector of labels for those datasets, the size of the 
+#' geom and whether or not to include error bars, and
 #' returns a formatted capacity vs cycle number plot.
 #' @param list A list of datasets, as exported from the arbin_import function - so each
 #' list element is also a list
@@ -172,7 +134,7 @@ arbin_plotvp <- function(data, cycles) {
 #' @examples 
 #' arbin_Qplot(list(mydatasetA, mydatasetB), labels = c("dataset A", "dataset B"))
 
-arbin_Qplot <- function(list, labels) {
+arbin_Qplot <- function(list, labels, size = 3, errors = FALSE) {
   
   require(ggplot2)
   require(scales)
@@ -199,27 +161,54 @@ arbin_Qplot <- function(list, labels) {
   
   # Basic plot setup. ==========================================================
   p <- ggplot(stats) +
-    geom_point(aes(x = cyc.n, y = Q.d, color = ident), size = 4) + 
+    geom_point(aes(x = cyc.n, y = Q.d, color = ident), size = size) +
     xlab("cycle number") +
     ylab(expression("Q"[discharge] * " / mAh g"^-1~"")) +
     guides(color = guide_legend(title = ""))
   
-  # If scales and grid are installed, then a custom theme is added. y-axis is
-  # also rescaled.
-  # This does not seem to work as I thought so it's cut out for now, and scales
-  # and grid are required packages.
-#  if(!requireNamespace("scales") == FALSE | !requireNamespace("grid") == FALSE) {
-    p <- p + theme_bw() +
-      theme(text = element_text(size=21)) +
-      theme(panel.border = element_rect(size=1,color = "black")) +
-      theme(axis.ticks.length=unit(-0.25, "cm")) +
-      theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
-      theme(axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"))) +
-      theme(panel.grid.major = element_line(size=0.5))
-    
-    p <- p + scale_y_continuous(limits=c(0, max(stats$Q.d)))
-#  }
+  p <- p + scale_y_continuous(limits=c(0, max(stats$Q.d)))
+  
+  if(errors) {
+    p <- p + geom_errorbar(aes(x = cyc.n, ymin = Q.d - Q.d.err, ymax = Q.d + Q.d.err, color = ident), size = 0.6)
+  }
   
   return(p)
+  
+}
+
+#' theme_arbintools
+#' 
+#' This is a ggplot theme for the arbintools package. There are no arguments.
+#' @keywords
+#' @export
+#' @examples 
+#' p <- p + theme_arbintools()
+
+theme_arbintools <- function(base_size=16) {
+  library(grid)
+  library(ggthemes)
+  (theme_foundation(base_size=base_size)
+    + theme(plot.title = element_text(size = rel(1.2), hjust = 0.5),
+            text = element_text(),
+            panel.background = element_rect(colour=NA),
+            plot.background = element_rect(fill = "transparent", colour=NA),
+            panel.border = element_rect(colour = NA),
+            axis.title = element_text(size = rel(1), colour="#333333"),
+            axis.title.y = element_text(angle=90, colour="#333333"),
+            axis.text = element_text(size = rel(0.8)), 
+            axis.line.x = element_line(size=0.5, colour="#333333"),
+            axis.line.y = element_line(size=0.5, colour="#333333"),
+            axis.ticks.length=unit(-0.15, "cm"),
+            axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"), colour="#666666"),
+            axis.text.y = element_text(margin = margin(0, 0.5, 0, 0.2, "cm"), colour="#666666"),
+            panel.grid.major = element_line(colour="#eaeaea", size = 0.5),
+            panel.grid.minor = element_blank(),
+            legend.key = element_rect(colour = NA),
+            legend.key.size = unit(0.6, "cm"),
+            legend.margin = unit(0, "cm"),
+            strip.background=element_rect(colour="#eaeaea",fill="#eaeaea"),
+            strip.text = element_text(colour = "#333333", lineheight=0.7),
+            legend.text = element_text(colour = "#333333")
+    ))
   
 }

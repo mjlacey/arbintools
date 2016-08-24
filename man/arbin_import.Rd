@@ -5,7 +5,7 @@
 \title{arbin_import}
 \usage{
 arbin_import(file, step.time = TRUE, energy = TRUE, cycles = 100,
-  mass = NULL, meanE = FALSE)
+  mass = NULL, meanE = FALSE, mass.err = 0.02, electr.err = 0.025)
 }
 \arguments{
 \item{file}{The filename, which must end in .xls or .xlsx.}
@@ -20,8 +20,14 @@ aggregating the statistics dataset.}
 \item{mass}{Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
 capacities in the raw and statistics data frames will be converted to mAh/g.}
 
-\item{meanE}{Defaults to FALSE. Will calculate a statistic for average charge and discharge voltage
-if set to TRUE.}
+\item{meanE}{Defaults to FALSE. Will calculate a statistic for average charge and discharge voltage 
+(as energy per cycle divided by charge) if set to TRUE. Note: energy must also be set to TRUE - 
+if it is not, the average voltage will not be calculated.}
+
+\item{mass.err}{Defaults to 0.02 (milligrams). Is the error associated with weighing an electrode coating.}
+
+\item{electr.err}{Defaults to 0.025 (milligrams). Is the error associated with the weight of
+the electrode substrate/foil itself.}
 }
 \description{
 This function takes an exported data file in Microsoft Excel format,

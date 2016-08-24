@@ -1,6 +1,6 @@
 Package: arbintools
 Title: Matt Lacey's Arbin Importing and Plotting Functions
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Matt", "Lacey", email = "matthew.lacey@kemi.uu.se", role = c("aut", "cre"))
 Description: A set of functions to handle importation and common plotting tasks for data obtained
   with Arbin battery cycling instruments using the MITS Pro software.
@@ -12,6 +12,7 @@ RoxygenNote: 5.0.1
 LinkingTo: Rcpp
 Imports: dplyr,
     ggplot2,
+    ggthemes,
     readxl,
     scales,
     grid,

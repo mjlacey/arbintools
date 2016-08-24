@@ -4,7 +4,7 @@
 \alias{arbin_Qplot}
 \title{arbin_Qplot}
 \usage{
-arbin_Qplot(list, labels)
+arbin_Qplot(list, labels, size = 3, errors = FALSE)
 }
 \arguments{
 \item{list}{A list of datasets, as exported from the arbin_import function - so each
@@ -13,7 +13,8 @@ list element is also a list}
 \item{labels}{A vector of labels corresponding to the datasets in the list, in the correct order.}
 }
 \description{
-This function takes a list of datasets, a vector of labels for those datasets and
+This function takes a list of datasets, a vector of labels for those datasets, the size of the 
+geom and whether or not to include error bars, and
 returns a formatted capacity vs cycle number plot.
 }
 \examples{

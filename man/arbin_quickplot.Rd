@@ -4,7 +4,7 @@
 \alias{arbin_quickplot}
 \title{arbin_quickplot}
 \usage{
-arbin_quickplot(data, x, y, geom = geom_point, size = 4)
+arbin_quickplot(data, x, y, geom = geom_point, size = 3)
 }
 \arguments{
 \item{data}{The dataset, which must be a dataframe.}
