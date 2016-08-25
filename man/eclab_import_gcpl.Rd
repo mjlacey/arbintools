@@ -4,7 +4,7 @@
 \alias{eclab_import_gcpl}
 \title{eclab_import_gcpl}
 \usage{
-eclab_import_gcpl(file, mass = NULL, cycles = 100)
+eclab_import_gcpl(file, mass = NULL, cycles = 100, dec = ".")
 }
 \arguments{
 \item{file}{The filename}
@@ -14,6 +14,9 @@ capacities will be converted to mAh/g.}
 
 \item{cycles}{Defaults to 100. Determines the maximum number of cycles to be considered when
 aggregating the statistics dataset.}
+
+\item{dec}{Corresponds to the decimal separator parameter in read.delim. Defaults to ".", change to "," if
+using the continental European convention.}
 }
 \description{
 This function takes .mpt or .txt files exported from EC-Lab using the "Process Data" option. 

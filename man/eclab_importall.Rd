@@ -4,13 +4,16 @@
 \alias{eclab_importall}
 \title{eclab_importall}
 \usage{
-eclab_importall(file, mass = NULL)
+eclab_importall(file, mass = NULL, dec = ".")
 }
 \arguments{
 \item{file}{The filename}
 
 \item{mass}{Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
 capacities will be converted to mAh/g.}
+
+\item{dec}{Corresponds to the decimal separator parameter in read.delim. Defaults to ".", change to "," if
+using the continental European convention.}
 }
 \description{
 This function takes .mpt or .txt files exported from EC-Lab using the "Process Data" option. 

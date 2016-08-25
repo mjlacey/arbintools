@@ -10,12 +10,14 @@
 #' @param file The filename
 #' @param mass Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
 #' capacities will be converted to mAh/g.
+#' @param dec Corresponds to the decimal separator parameter in read.delim. Defaults to ".", change to "," if
+#' using the continental European convention.
 #' @keywords import
 #' @export
 #' @examples
 #' mydataset <- eclab_importall("dataset.mpt", mass = 3.5)
 
-eclab_importall <- function(file, mass = NULL) {
+eclab_importall <- function(file, mass = NULL, dec = ".") {
   
   require(dplyr)
   
@@ -27,7 +29,7 @@ eclab_importall <- function(file, mass = NULL) {
     unlist %>%
     as.numeric %>%
     -1 %>% # Number of header lines to skip is the number minus one.
-    read.delim(file, skip = .) # Read in whole file, skipping the header lines.
+    read.delim(file, skip = ., dec = dec) # Read in whole file, skipping the header lines.
   
   if("X.Q.Qo..C" %in% colnames(data.in)) data.in$X.Q.Qo..C <- data.in$X.Q.Qo..C / 3.6
   
@@ -119,13 +121,15 @@ eclab_importall <- function(file, mass = NULL) {
 #' capacities will be converted to mAh/g.
 #' @param cycles Defaults to 100. Determines the maximum number of cycles to be considered when
 #' aggregating the statistics dataset.
+#' @param dec Corresponds to the decimal separator parameter in read.delim. Defaults to ".", change to "," if
+#' using the continental European convention.
 #' @keywords import
 #' @export
 #' @examples
 #' mydataset <- eclab_import_gcpl("dataset.mpt")
 #' mydataset <- eclab_import_gcpl("dataset.mpt", mass = 3.5, cycles = 50)
 
-eclab_import_gcpl <- function(file, mass = NULL, cycles = 100) {
+eclab_import_gcpl <- function(file, mass = NULL, cycles = 100, dec = ".") {
   
   # Import raw data procedure
   data.in <- file %>% 
@@ -135,7 +139,7 @@ eclab_import_gcpl <- function(file, mass = NULL, cycles = 100) {
     unlist %>%
     as.numeric %>%
     -1 %>% # Number of header lines to skip is the number minus one.
-    read.delim(file, skip = .) # Read in whole file, skipping the header lines.
+    read.delim(file, skip = ., dec = ".") # Read in whole file, skipping the header lines.
   
   # List of variable names and their replacements
   replace <- list(
