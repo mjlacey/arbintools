@@ -64,16 +64,15 @@ if(raw$state[1] == "D") {
 }
 
 # Now assemble the data.
+# check if Windows, and set ncores to 1.
+if(Sys.info()["sysname"] == "Windows") {
+  cores <- 1 
+} else {
+  cores <- detectCores()
+}
 
 message("Now assembling processed data, please wait a moment... ", appendLF = FALSE)
 proc <- mclapply(split(raw, raw$cyc.n), function(cycle) {
-  
-  # check if Windows, and set ncores to 1.
-  if(Sys.info()["sysname"] == "Windows") {
-    cores = 1 
-  } else {
-    cores = detectCores()
-  }
   
   # remove partial current-interruption cycle if it exists
   if(last(cycle$state) != "R") {
