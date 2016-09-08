@@ -17,5 +17,6 @@ Imports: dplyr,
     scales,
     grid,
     Rcpp,
-    parallel
+    parallel,
+    purrr
 Suggests:
