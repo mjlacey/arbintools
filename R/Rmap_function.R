@@ -68,6 +68,14 @@ if(raw$state[1] == "D") {
 message("Now assembling processed data, please wait a moment... ", appendLF = FALSE)
 proc <- mclapply(split(raw, raw$cyc.n), function(cycle) {
   
+  # check if Windows, and set ncores to 1.
+  if(Sys.info()["sysname"] == "Windows") {
+    cores = 1 
+  } else {
+    cores = detectCores()
+  }
+  
+  # remove partial current-interruption cycle if it exists
   if(last(cycle$state) != "R") {
     cycle <- filter(cycle, rest < max(cycle$rest))
   }
@@ -95,7 +103,7 @@ proc <- mclapply(split(raw, raw$cyc.n), function(cycle) {
     mutate(R = (E - E0) / I, R_err = E0_err / abs(I)) # calculate the resistances and error.
   
   return(out)
-}, mc.cores = detectCores())
+}, mc.cores = cores)
 
 proc <- do.call(rbind, proc)
 message("done.")
