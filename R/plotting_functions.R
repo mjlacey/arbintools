@@ -369,15 +369,15 @@ arbin_plotvp_multi<-function (list, labels, cycle=1, norm=NULL)
   }
   if (!is.null(norm))
     #set units for mass normalization
-  {if (norm=="mass" & !is.null(l$norm$mass)){
+  {if (norm=="mass" & !is.null(l[[1]]$norm$mass)){
     normunits <- xlab(expression("Q"[discharge] * " / mAh g"^-1 ~ ""))
   }
     #set units for area normalization
-    if (norm=="area" & !is.null(l$norm$area)){
+    if (norm=="area" & !is.null(l[[1]]$norm$area)){
       normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-2 ~ ""))
     }
     #set units for volume normalization
-    if (norm=="vol" & !is.null(l$norm$vol)){
+    if (norm=="vol" & !is.null(l[[1]]$norm$vol)){
       normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
     }
   }
@@ -385,8 +385,8 @@ arbin_plotvp_multi<-function (list, labels, cycle=1, norm=NULL)
     stop("This cell does not have the required normalization information. Please check that it was input correctly during import.")
   }
   # Basic plot setup. ==========================================================
-  p <- ggplot(stats) + geom_point(aes(x = Q.d, y = E, color = ident), size = 4)+
-    geom_point(aes(x = Q.c, y = E, color = ident, group=ident), size = 4)+
+  p <- ggplot(stats) + geom_path(aes(x = Q.d, y = E, color = ident), size = 1)+
+    geom_path(aes(x = Q.c, y = E, color = ident, group=ident), size = 1)+
     normunits + ylab("Voltage (V)") +
     guides(color = guide_legend("Cells"))
 
@@ -519,7 +519,7 @@ arbin_Qplot <- function(list, labels, norm=NULL)  {
 #' @export
 #' @examples
 #' arbin_dQdV(list,cellfile,1,ymin,ymax)
-arbin_dQdV<-function (list,title,cycle=1,ymin=0.1,ymax=1)
+arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=-0.1,ymax=1)
 {
   require(ggplot2)
   require(scales)
@@ -568,14 +568,14 @@ arbin_dQdV<-function (list,title,cycle=1,ymin=0.1,ymax=1)
 #' Compare differential capacity plots from different cells, same cycle. .
 #'
 #' @param list list of data generated from arbinimport script.
-#' @param title character vector containing the legend for each Cell for the legend
+#' @param label character vector containing the legend for each Cell for the legend
 #' @param cycle Number of the cycle of interest, default is cycle=1
 #' @param ymin set ploting window range for the dQ/dV axis, default is -1000
 #' @param ymax set ploting window range for the dQ/dV axis, default is 1500
 #' @export
 #' @examples
 #' arbin_dQdV_multi(l,title=c("Cell1", "Cell2","Cell3"),cycle=1,ymin=-1000,ymax=1500)
-arbin_dQdV_multi<-function (list,title,cycle=1,ymin=-1000,ymax=1500)
+arbin_dQdV_multi<-function (list,label,cycle=1,ymin=-1,ymax=1)
 {
   require(ggplot2)
   require(scales)
@@ -593,13 +593,13 @@ arbin_dQdV_multi<-function (list,title,cycle=1,ymin=-1000,ymax=1500)
     #filter out/remove other cycles that you dont want.
     df<-filter(df, cyc.n %in% cycle)
     #add label to provide coloring for graphing
-    df$ident <- title[i]
+    df$label <- label[i]
     return(df)
   })
   stats <- do.call(rbind, stats)
   # Basic plot setup. ==========================================================
   p <- ggplot(stats) +
-    geom_point(aes(x = E, y = dQdV, color=ident))+
+    geom_path(aes(x = E, y = dQdV, color=label), size=1)+
 
     # Axis and legend titles/colors set================================================
     xlab("Voltage (V)") + ylab("dQdV") +
