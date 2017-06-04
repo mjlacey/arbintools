@@ -20,4 +20,3 @@ of cycles, as a vector - and outputs charge and discharge voltage profiles.
 arbin_plotvp(mydataset, 1)
 arbin_plotvp(mydataset, cycles = c(1,5,10))
 }
-

@@ -28,4 +28,3 @@ arbin_quickplot(mydataset$raw, x = t, y = E)
 arbin_quickplot(filter(mydataset$raw, cyc.n == 1, x = t, y = E, geom = geom_path, size = 1)
 arbin_quickplot(mydataset$stat, x = cyc.n, y = d.Q)
 }
-

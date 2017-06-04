@@ -24,4 +24,3 @@ statistics data frame. Consequently the output is a data frame rather than a lis
 mydataset <- arbin_import("dataset.xlsx")
 mydataset <- arbin_import("dataset.xlsx", step.time = FALSE)
 }
-

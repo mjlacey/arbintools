@@ -18,5 +18,5 @@ returns a formatted capacity vs cycle number plot.
 }
 \examples{
 arbin_Qplot(list(mydatasetA, mydatasetB), labels = c("dataset A", "dataset B"))
+arbin_Qplot(l1[1:3],labels=c("Cell1", "Cell2","Cell3"))
 }
-
