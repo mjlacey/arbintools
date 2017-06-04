@@ -27,7 +27,7 @@
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
 #' l=lapply(1:length(cellfile),function(x) arbinimport(cellfile[x],cycles=100,mass=mass[x]))
 
-arbinimport<-function (file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, area = NULL , vol = NULL, meanE = FALSE)
+arbin_import<-function (file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, area = NULL , vol = NULL, meanE = FALSE)
   {
   require(readxl)
 

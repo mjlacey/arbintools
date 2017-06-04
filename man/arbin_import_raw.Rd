@@ -4,7 +4,8 @@
 \alias{arbin_import_raw}
 \title{arbin_import_raw}
 \usage{
-arbin_import_raw(file, step.time = TRUE, energy = TRUE, mass = NULL)
+arbin_import_raw(file, step.time = TRUE, energy = TRUE, mass = NULL,
+  area = NULL, vol = NULL)
 }
 \arguments{
 \item{file}{The filename, which must end in .xls or .xlsx.}

@@ -4,13 +4,14 @@
 \alias{arbin_plotvp}
 \title{arbin_plotvp}
 \usage{
-arbin_plotvp(data, cycles)
+arbin_plotvp(data, cycles = 1, norm = NULL)
 }
 \arguments{
-\item{data}{The dataset, which can be the list as outputted by arbin_import or the data
-frame as arbin_import_raw.}
+\item{data}{The dataset, which is the list as outputted by arbin_import.}
 
-\item{cycles}{The cycles to be plotted, expressed as a vector}
+\item{cycles}{The cycles to be plotted, expressed as a vector. Defaults to first cycle.}
+
+\item{norm}{character string used to select how to normalize your data: "mass", "area", "vol". Deaults to Null and plots absolute capacity.}
 }
 \description{
 This function takes a data frame of raw data and a specified cycle - or number
@@ -18,5 +19,5 @@ of cycles, as a vector - and outputs charge and discharge voltage profiles.
 }
 \examples{
 arbin_plotvp(mydataset, 1)
-arbin_plotvp(mydataset, cycles = c(1,5,10))
+arbin_plotvp(mydataset, cycles = c(1,5,10), norm="mass")
 }
