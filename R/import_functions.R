@@ -12,8 +12,12 @@
 #' @param energy Defaults to TRUE. Includes the (dis)charge energy variables from the data file if TRUE.
 #' @param cycles Defaults to 100. Determines the maximum number of cycles to be considered when
 #' aggregating the statistics dataset.
-#' @param mass Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
-#' capacities in the raw and statistics data frames will be converted to mAh/g.
+#' @param mass Defaults to NULL. If an active material mass is specified - in MILLIGRAMS, mg - it is stored
+#' in the norm parameter for normalization options during plotting.
+#' @param area Defaults to NULL. If an electrode area is specified - in CENTIMETERS, cm^3 - it is stored
+#' in the norm parameter for normalization options during plotting.
+#' @param vol Defaults to NULL. If an active material volume is specified - in CUBIC CENTIMETERS, cm^3 - it is stored
+#' in the norm parameter for normalization options during plotting.
 #' @param meanE Defaults to FALSE. Will calculate a statistic for average charge and discharge voltage
 #' if set to TRUE.
 #' @keywords
