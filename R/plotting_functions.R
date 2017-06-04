@@ -1,8 +1,9 @@
 ### Plotting functions. The plotting functions here include: arbin_quickplot,
 ### for quickly plotting any x or y variable; arbin_plotvp, for plotting voltage
-### profiles; arbin_qplot, for plotting capacity vs cycle number with
-### multiple datasets;arbin_dQdV, for plotting differential capacity plot of one
-### or multiple cycles of one cell.
+### vs capacity profiles of one or more cycles of one cell; arbin_qplot, for plotting
+### capacity vs cycle number with multiple datasets;arbin_dQdV, for plotting
+### differential capacity plot of one or multiple cycles of one cell;arbin_dQdV_multi,
+### for plotting differential capacity plot of multiple cells at one cycle number.
 
 #' arbin_quickplot
 #'
@@ -262,7 +263,8 @@ arbin_dQdV<-function (list,title,cycle=1,ymin=0.1,ymax=1)
 
   # Basic plot setup. ==========================================================
   p <- ggplot(df) + geom_point(aes(x = E, y = dQdV,color = factor(cyc.n), group = factor(cyc.n)),size = 1)+
-    xlab(expression("Voltage")) + ylab("dQdV") +
+  # Axis and legend titles set==================================================
+    xlab(expression("Voltage / V")) + ylab("dQ/dV") +
     ggtitle(title)
 
   #Custom theme is added========================================================
@@ -275,5 +277,60 @@ arbin_dQdV<-function (list,title,cycle=1,ymin=0.1,ymax=1)
 
   #Y axis is made to be continuous with limits set using ymin and ymax=========
   p <- p + scale_y_continuous(limits = c(ymin, ymax))
+  return(p)
+}
+#' Compare differential capacity plots from different cells, same cycle. .
+#'
+#' @param list list of data generated from arbinimport script.
+#' @param title character vector containing the legend for each Cell for the legend
+#' @param cycle Number of the cycle of interest, default is cycle=1
+#' @param ymin set ploting window range for the dQ/dV axis, default is -1000
+#' @param ymax set ploting window range for the dQ/dV axis, default is 1500
+#' @export
+#' @examples
+#' arbin_dQdV_multi(l,title=c("Cell1", "Cell2","Cell3"),cycle=1,ymin=-1000,ymax=1500)
+arbin_dQdV_multi<-function (list,title,cycle=1,ymin=-1000,ymax=1500)
+{
+  require(ggplot2)
+  require(scales)
+  require(grid)
+  require(dplyr)
+
+  #remove the statistics sublist, keep raw data for dQ/dV vs V plot
+  stats <- lapply(list, function(x) x[[1]])
+  stats <- lapply(seq_along(stats), function(i) {
+    df<-stats[[i]]
+    df$Q<-df$Q.c+df$Q.d
+    x <- diff(df$Q)/diff(df$E)
+    x[!is.finite(x)] <- 0
+    df$dQdV<- c(0,x)
+    #filter out/remove other cycles that you dont want.
+    df<-filter(df, cyc.n %in% cycle)
+    #add label to provide coloring for graphing
+    df$ident <- title[i]
+    return(df)
+  })
+  stats <- do.call(rbind, stats)
+  # Basic plot setup. ==========================================================
+  p <- ggplot(stats) +
+    geom_point(aes(x = E, y = dQdV, color=ident))+
+
+    # Axis and legend titles/colors set================================================
+    xlab("Voltage (V)") + ylab("dQdV") +
+    ggtitle(paste("Cycle",cycle))+
+    labs(color="Sample")+
+
+    #Custom theme is added========================================================
+    theme_bw() +
+    theme(text = element_text(size = 21)) +
+    theme(legend.position = "right")+
+    theme(panel.border = element_rect(size = 1, color = "black")) +
+    theme(axis.ticks.length = unit(-0.25, "cm")) +
+    theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
+    theme(axis.text.y = element_text(margin = margin(0,0.5, 0, 0.2, "cm"))) +
+    theme(panel.grid.major = element_line(size = 0.5))+
+
+    #Y axis is made to be continuous with limits set using ymin and ymax=========
+    scale_y_continuous(limits = c(ymin, ymax))
   return(p)
 }
