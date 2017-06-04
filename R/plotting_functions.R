@@ -240,6 +240,7 @@ arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
   }
 
   #Set axis lables for each normalization case========================
+  normunits<-NULL
   #set units for no normalization
   if (is.null(norm)){
     normunits <- xlab(expression("Q"[discharge] * " / mAh"))
@@ -258,6 +259,11 @@ arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
       normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
     }
   }
+
+  if (is.null(normunits)){
+    stop("This cell does not have the required normalization information. Please check that it was input correctly during import.")
+  }
+
   # Basic plot setup. =============================================
   p <- ggplot(plotted.data) +
     geom_path(aes(x = Q.d, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
@@ -357,6 +363,7 @@ arbin_plotvp_multi<-function (list, labels, cycle=1, norm=NULL)
   stats <- do.call(rbind, stats)
 
   #set units for no normalization
+  normunits<-NULL
   if (is.null(norm)){
     normunits <- xlab(expression("Q"[discharge] * " / mAh"))
   }
@@ -373,6 +380,9 @@ arbin_plotvp_multi<-function (list, labels, cycle=1, norm=NULL)
     if (norm=="vol" & !is.null(l$norm$vol)){
       normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
     }
+  }
+  if (is.null(normunits)){
+    stop("This cell does not have the required normalization information. Please check that it was input correctly during import.")
   }
   # Basic plot setup. ==========================================================
   p <- ggplot(stats) + geom_point(aes(x = Q.d, y = E, color = ident), size = 4)+
