@@ -449,28 +449,32 @@ arbin_Qplot <- function(list, labels, norm=NULL)  {
 
   #create axis label normunits for each normalization condition.=================
    #set units for no normalization
+  normunits<-NULL
   if (is.null(norm)){
     normunits <- ylab(expression("Q"[discharge] * " / mAh"))
   }
   if (!is.null(norm))
     #set units for mass normalization
-  {if (norm=="mass" & !is.null(l$norm$mass)){
+  {if (norm=="mass" & !is.null(l[[1]]$norm$mass)){
     normunits <- ylab(expression("Q"[discharge] * " / mAh g"^-1 ~ ""))
   }
     #set units for area normalization
-    if (norm=="area" & !is.null(l$norm$area)){
+    if (norm=="area" & !is.null(l[[1]]$norm$area)){
       normunits <- ylab(expression("Q"[discharge] * " / mAh cm"^-2 ~ ""))
     }
     #set units for volume normalization
-    if (norm=="vol" & !is.null(l$norm$vol)){
+    if (norm=="vol" & !is.null(l[[1]]$norm$vol)){
       normunits <- ylab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
     }
   }
 
   # Basic plot setup. ==========================================================
+  if (is.null(normunits)){
+    stop("Data for this normalization was missing upon import.")
+  }
   p <- ggplot(stats) +
     geom_point(aes(x = cyc.n, y = Q.d, color = ident), size = 4) +
-    xlab("cycle number") + normunit +
+    xlab("cycle number") + normunits +
     guides(color = guide_legend(title = ""))
 
   # If scales and grid are installed, then a custom theme is added. y-axis is
