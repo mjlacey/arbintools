@@ -25,11 +25,11 @@
 #' arbin_quickplot(list, x = cyc.n, y = d.Q, norm="area")
 
 arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point, size = 4) {
-
   require(ggplot2)
   require(scales)
   require(grid)
   require(dplyr)
+
   #decide whether we need raw or stats to pull from l
   #If x axis is time, or capacity need to pull raw data
   if (x=="t" | x=="Q.d" |x=="Q.c"){
@@ -39,16 +39,14 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
   if (x=="cyc.n"){
     data<-l$stats
   }
-  # the x and y arguments are converted to strings so that they can
-  # be evaluated correctly by ggplot using aes_string().
-  x <- deparse(substitute(x))
-  y <- deparse(substitute(y))
+
   #Set units depending on normalization desired============================
   # labels is a list of labels with the element names corresponding to
   # variable names present in the data files. When plotting, a correctly
   # formatted axis label is selected from the list.
 
   #set units for no normalization========================================
+  labels<-NULL
   if (is.null(norm)){
     labels <- list(
       t = "time / s",
@@ -56,8 +54,8 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
       cyc.n = "cycle number",
       I = "I / A",
       E = "cell voltage / V",
-      Q.c = "charge capacity / mAh",
-      Q.d = "discharge capacity / mAh",
+      Q.c = "Q charge / mAh",
+      Q.d = "Q discharge / mAh",
       step.t = "step time / s",
       En.d = "discharge energy / Wh",
       En.c = "charge energy / Wh",
@@ -76,8 +74,8 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
       cyc.n = "cycle number",
       I = "I / A",
       E = "cell voltage / V",
-      Q.c = "charge capacity / mAh g"^-1 ~ "",
-      Q.d = "discharge capacity / mAh g"^-1 ~ "",
+      Q.c = "Q charge / mAh g"^-1 ~ "",
+      Q.d = "Q discharge / mAh g"^-1 ~ "",
       step.t = "step time / s",
       En.d = "discharge energy / Wh kg"^-1 ~ "",
       En.c = "charge energy / Wh kg"^-1 ~ "",
@@ -98,8 +96,8 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
         cyc.n = "cycle number",
         I = "I / A",
         E = "cell voltage / V",
-        Q.c = "charge capacity / mAh cm"^-2 ~ "",
-        Q.d = "discharge capacity / mAh cm"^-2 ~ "",
+        Q.c = "Q charge / mAh cm"^-2 ~ "",
+        Q.d = "Q discharge / mAh cm"^-2 ~ "",
         step.t = "step time / s",
         En.d = "discharge energy / mWh cm"^-2 ~ "",
         En.c = "charge energy / mWh cm"^-2 ~ "",
@@ -119,8 +117,8 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
        cyc.n = "cycle number",
        I = "I / A",
        E = "cell voltage / V",
-       Q.c = "charge capacity / mAh cm"^-3 ~ "",
-       Q.d = "discharge capacity / mAh cm"^-3 ~ "",
+       Q.c = "Q charge / mAh cm"^-3 ~ "",
+       Q.d = "Q discharge / mAh cm"^-3 ~ "",
        step.t = "step time / s",
        En.d = "discharge energy / Wh cm"^-3 ~ "",
        En.c = "charge energy / Wh cm"^-3 ~ "",
@@ -134,10 +132,12 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
       data$Q.d<-data$Q.d/l$norm$vol*1000
     }
   }
-
+  #Provide error message if no normalization information is available for the value the user wants.
+if (is.null(labels)){
+  stop("This cell does not have the required normalization information. Please check that it was input correctly during import.")
+}
   # Basic plot setup. ================================================
-  p <- ggplot(data) +
-    geom(aes_string(x = x, y = y), size = size)
+  p <- ggplot(data) + geom(aes_string(x = x, y = y), size = size)
 
   # Labels looked up from the list of labels. ========================
   p <- p + xlab(labels[[x]]) + ylab(labels[[y]])
