@@ -5,7 +5,7 @@
 \title{arbin_import}
 \usage{
 arbin_import(file, step.time = TRUE, energy = TRUE, cycles = 100,
-  mass = NULL, meanE = FALSE)
+  mass = NULL, area = NULL, vol = NULL, meanE = FALSE)
 }
 \arguments{
 \item{file}{The filename, which must end in .xls or .xlsx.}
@@ -17,8 +17,14 @@ arbin_import(file, step.time = TRUE, energy = TRUE, cycles = 100,
 \item{cycles}{Defaults to 100. Determines the maximum number of cycles to be considered when
 aggregating the statistics dataset.}
 
-\item{mass}{Defaults to NULL. If an active material mass is specified - in MILLIGRAMS - the
-capacities in the raw and statistics data frames will be converted to mAh/g.}
+\item{mass}{Defaults to NULL. If an active material mass is specified - in MILLIGRAMS, mg - it is stored
+in the norm parameter for normalization options during plotting.}
+
+\item{area}{Defaults to NULL. If an electrode area is specified - in CENTIMETERS, cm^3 - it is stored
+in the norm parameter for normalization options during plotting.}
+
+\item{vol}{Defaults to NULL. If an active material volume is specified - in CUBIC CENTIMETERS, cm^3 - it is stored
+in the norm parameter for normalization options during plotting.}
 
 \item{meanE}{Defaults to FALSE. Will calculate a statistic for average charge and discharge voltage
 if set to TRUE.}
@@ -33,5 +39,5 @@ sheet as outputted to the Excel file is not read.
 \examples{
 mydataset <- arbin_import("dataset.xlsx")
 mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
+l=lapply(1:length(cellfile),function(x) arbinimport(cellfile[x],cycles=100,mass=mass[x]))
 }
-

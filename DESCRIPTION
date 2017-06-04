@@ -7,7 +7,7 @@ Depends:
     R (>= 3.2.0)
 License: CC0
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Imports: dplyr,
     ggplot2,
     reshape2,
