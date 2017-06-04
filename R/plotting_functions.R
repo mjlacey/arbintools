@@ -171,16 +171,16 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
 #'
 #' This function takes a data frame of raw data and a specified cycle - or number
 #' of cycles, as a vector - and outputs charge and discharge voltage profiles.
-#' @param data The dataset, which can be the list as outputted by arbin_import or the data
-#' frame as arbin_import_raw.
-#' @param cycles The cycles to be plotted, expressed as a vector
+#' @param data The dataset, which is the list as outputted by arbin_import.
+#' @param cycles The cycles to be plotted, expressed as a vector. Defaults to first cycle.
+#' @param norm character string used to select how to normalize your data: "mass", "area", "vol". Deaults to Null and plots absolute capacity.
 #' @keywords
 #' @export
 #' @examples
 #' arbin_plotvp(mydataset, 1)
-#' arbin_plotvp(mydataset, cycles = c(1,5,10))
+#' arbin_plotvp(mydataset, cycles = c(1,5,10), norm="mass")
 
-arbin_plotvp <- function(data, cycles) {
+arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
 
   require(ggplot2)
   require(scales)
@@ -190,6 +190,8 @@ arbin_plotvp <- function(data, cycles) {
   # Data for the specified cycles is filtered off (uses filter() from
   # the dplyr package.) Checks first what format the data is in. If it sees
   # a list it assumes it should use the 'raw' data frame.
+
+  #Filter the data to remove I=0 data points and extra cycles.
   if (class(data) == "list") {
     plotted.data <- filter(data$raw, cyc.n %in% cycles, I != 0)
   } else if (class(data) == "data.frame") {
@@ -216,11 +218,51 @@ arbin_plotvp <- function(data, cycles) {
     }
   }
 
+  #Normalize capacity data=========================================
+  #normalize capacity data according to desired norm variable for each cell.
+  if (!is.null(norm))
+  {
+    #Perform mass normalization
+    if (norm=="mass" & !is.null(data$norm$mass)){
+    plotted.data$Q.d<-plotted.data$Q.d/data$norm$mass*1e6
+    plotted.data$Q.c<-plotted.data$Q.c/data$norm$mass*1e6
+    }
+    #Perform area normalization
+    if (norm=="area" & !is.null(data$norm$area)){
+      plotted.data$Q.d<-plotted.data$Q.d/data$norm$area*1e3
+      plotted.data$Q.c<-plotted.data$Q.c/data$norm$area*1e3
+    }
+    #Perform volume normalization
+    if (norm=="vol" & !is.null(data$norm$vol)){
+      plotted.data$Q.d<-plotted.data$Q.d/data$norm$vol*1e3
+      plotted.data$Q.c<-plotted.data$Q.c/data$norm$vol*1e3
+    }
+  }
+
+  #Set axis lables for each normalization case========================
+  #set units for no normalization
+  if (is.null(norm)){
+    normunits <- xlab(expression("Q"[discharge] * " / mAh"))
+  }
+  if (!is.null(norm))
+    #set units for mass normalization
+  {if (norm=="mass" & !is.null(data$norm$mass)){
+    normunits <- xlab(expression("Q"[discharge] * " / mAh g"^-1 ~ ""))
+  }
+    #set units for area normalization
+    if (norm=="area" & !is.null(data$norm$area)){
+      normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-2 ~ ""))
+    }
+    #set units for volume normalization
+    if (norm=="vol" & !is.null(data$norm$vol)){
+      normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
+    }
+  }
   # Basic plot setup. =============================================
   p <- ggplot(plotted.data) +
     geom_path(aes(x = Q.d, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
     geom_path(aes(x = Q.c, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
-    xlab("Q / mAh g"^-1~"") +
+    normunits +
     ylab("cell voltage / V") +
     guides(color = guide_legend(title = "cycle"))
 
