@@ -4,12 +4,12 @@
 \alias{arbin_dQdV_multi}
 \title{arbin_dQdV_multi}
 \usage{
-arbin_dQdV_multi(list, title, cycle = 1, ymin = -1000, ymax = 1500)
+arbin_dQdV_multi(list, label, cycle = 1, ymin = -1, ymax = 1)
 }
 \arguments{
 \item{list}{list of data generated from arbinimport script.}
 
-\item{title}{character vector containing the legend for each Cell for the legend}
+\item{label}{character vector containing the legend for each Cell for the legend}
 
 \item{cycle}{Number of the cycle of interest, default is cycle=1}
 
