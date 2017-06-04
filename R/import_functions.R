@@ -23,11 +23,11 @@
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
 #' l=lapply(1:length(cellfile),function(x) arbinimport(cellfile[x],cycles=100,mass=mass[x]))
 
-arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, meanE = FALSE) {
-
+arbinimport<-function (file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, area = NULL , vol = NULL, meanE = FALSE)
+  {
   require(readxl)
 
-  # All the "Channel*" sheets are read in. This function needs the readxl package.
+  # All the "Channel*" sheets are read in, excludes plot sheets. This function needs the readxl package.
   l <- lapply(grep("Channel_\\d", excel_sheets(file), value = TRUE),
               read_excel, path = file)
 
@@ -55,18 +55,6 @@ arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, ma
     x$En.c <- l$`Charge_Energy(Wh)` # charge energy (Wh)
   }
 
-  # Capacities are converted to mAh/g if active mass is specified.
-  if(!is.null(mass) == TRUE) {
-    x$Q.c <- x$Q.c * (1E6/mass)
-    x$Q.d <- x$Q.d * (1E6/mass)
-  }
-
-  # Energies, if present, are converted to Wh/kg if active mass is specified.
-  if(!is.null(mass) == TRUE & energy == TRUE) {
-    x$En.d <- x$En.d * (1E6/mass)
-    x$En.c <- x$En.c * (1E6/mass)
-  }
-
   # Number of cycles to be included defaults to 100. In any case, the data is checked
   # and incomplete last cycles are discarded.
   cycles <- ifelse(max(x$cyc.n >= cycles), cycles, max(x$cyc.n) - 1)
@@ -89,9 +77,11 @@ arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, ma
     stats$meanE.d <- sapply(c(1:cycles), function(i) mean(x$E[x$cyc.n == i & x$I < 0], 1))
     stats$meanE.c <- sapply(c(1:cycles), function(i) mean(x$E[x$cyc.n == i & x$I > 0], 1))
   }
-
-  # Raw and statistics data frames are returned as a list.
-  out <- list(raw = x, stats = stats)
+#Save information for normalization into list.
+#Allows plotting functions to perform normalization as needed instead of at import.
+  norm<-list(mass=mass, area=area, vol=vol)
+  # Raw, statistics, and normalization data frames are returned as a list.
+  out <- list(raw = x, stats = stats, norm = norm)
   return(out)
 }
 
@@ -111,7 +101,7 @@ arbin_import <- function(file, step.time = TRUE, energy = TRUE, cycles = 100, ma
 #' mydataset <- arbin_import("dataset.xlsx")
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE)
 
-arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE, mass = NULL) {
+arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE, mass = NULL, area = NULL , vol = NULL) {
 
   require(readxl, quietly = TRUE)
 
@@ -137,17 +127,39 @@ arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE, mass = NULL)
     x$En.d <- l$`Discharge_Energy(Wh)` # discharge energy (Wh)
     x$En.c <- l$`Charge_Energy(Wh)` # charge energy (Wh)
   }
-
+  # if active mass is specified.=========================================
   # Capacities are converted to mAh/g if active mass is specified.
   if(!is.null(mass) == TRUE) {
     x$Q.c <- x$Q.c * (1E6/mass)
     x$Q.d <- x$Q.d * (1E6/mass)
   }
 
-  # Energies, if present, are converted to Wh/kg if active mass is specified.
+  # Energies, if present, are converted to Wh/kg
   if(!is.null(mass) == TRUE & energy == TRUE) {
     x$En.d <- x$En.d * (1E6/mass)
     x$En.c <- x$En.c * (1E6/mass)
+  }
+  # if area is specified.=========================================
+  # Capacities are converted to mAh/cm^2
+  if(!is.null(area) == TRUE) {
+    x$Q.c <- x$Q.c * (1/area)
+    x$Q.d <- x$Q.d * (1/area)
+  }
+  # Energies, if present, are converted to Wh/cm^2
+  if(!is.null(area) == TRUE & energy == TRUE) {
+    x$En.d <- x$En.d * (1/area)
+    x$En.c <- x$En.c * (1/area)
+  }
+  # if volume is specified.=========================================
+  # Capacities are converted to mAh/cm^3
+  if(!is.null(vol) == TRUE) {
+    x$Q.c <- x$Q.c * (1E3/vol)
+    x$Q.d <- x$Q.d * (1E3/vol)
+  }
+   # Energies, if present, are converted to Wh/cm^3
+  if(!is.null(vol) == TRUE & energy == TRUE) {
+    x$En.d <- x$En.d * (1/vol)
+    x$En.c <- x$En.c * (1/vol)
   }
 
   return(x)
