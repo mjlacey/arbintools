@@ -400,13 +400,14 @@ arbin_plotvp_multi<-function (list, labels, cycle=1, norm=NULL)
 #' @param list A list of datasets, as exported from the arbin_import function - so each
 #' list element is also a list
 #' @param labels A vector of labels corresponding to the datasets in the list, in the correct order.
+#' @param norm character string used to select how to normalize your data: "mass", "area", "vol". Defaults to Null.
 #' @keywords
 #' @export
 #' @examples
 #' arbin_Qplot(list(mydatasetA, mydatasetB), labels = c("dataset A", "dataset B"))
-#' arbin_Qplot(l1[1:3],labels=c("Cell1", "Cell2","Cell3"))
+#' arbin_Qplot(l1[1:3],labels=c("Cell1", "Cell2","Cell3"), norm="mass")
 
-arbin_Qplot <- function(list, labels) {
+arbin_Qplot <- function(list, labels, norm=NULL)  {
 
   require(ggplot2)
   require(scales)
@@ -424,18 +425,52 @@ arbin_Qplot <- function(list, labels) {
   # Attach the label to the statistics. ========================================
   stats <- lapply(seq_along(stats), function(i) {
     df <- stats[[i]]
+    #set ident for use in color coding the plot.
     df$ident <- labels[i]
+    if (!is.null(norm))
+    {#normalize discharge capacity data according to desired norm variable for each cell.
+    if (norm=="mass" & !is.null(list[[i]]$norm$mass)){
+      df$Q.d<-df$Q.d/list[[i]]$norm$mass*1e6
+    }
+      #set units for area normalization
+      if (norm=="area" & !is.null(list[[i]]$norm$area)){
+        df$Q.d<-df$Q.d/list[[i]]$norm$area*1e3
+      }
+      #set units for volume normalization
+      if (norm=="vol" & !is.null(list[[i]]$norm$vol)){
+        df$Q.d<-df$Q.d/list[[i]]$norm$vol*1e3
+      }
+    }
     return(df)
   })
 
   # Bind each statistics data frame into one data frame. =======================
   stats <- do.call(rbind, stats)
 
+  #create axis label normunits for each normalization condition.=================
+   #set units for no normalization
+  if (is.null(norm)){
+    normunits <- ylab(expression("Q"[discharge] * " / mAh"))
+  }
+  if (!is.null(norm))
+    #set units for mass normalization
+  {if (norm=="mass" & !is.null(l$norm$mass)){
+    normunits <- ylab(expression("Q"[discharge] * " / mAh g"^-1 ~ ""))
+  }
+    #set units for area normalization
+    if (norm=="area" & !is.null(l$norm$area)){
+      normunits <- ylab(expression("Q"[discharge] * " / mAh cm"^-2 ~ ""))
+    }
+    #set units for volume normalization
+    if (norm=="vol" & !is.null(l$norm$vol)){
+      normunits <- ylab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
+    }
+  }
+
   # Basic plot setup. ==========================================================
   p <- ggplot(stats) +
     geom_point(aes(x = cyc.n, y = Q.d, color = ident), size = 4) +
-    xlab("cycle number") +
-    ylab(expression("Q"[discharge] * " / mAh g"^-1~"")) +
+    xlab("cycle number") + normunit +
     guides(color = guide_legend(title = ""))
 
   # If scales and grid are installed, then a custom theme is added. y-axis is
