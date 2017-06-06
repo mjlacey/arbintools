@@ -27,7 +27,8 @@
 #' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
 #' l=lapply(1:length(cellfile),function(x) arbinimport(cellfile[x],cycles=100,mass=mass[x]))
 
-arbin_import<-function (file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, area = NULL , vol = NULL, meanE = FALSE)
+arbin_import<-function (file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, area = NULL ,
+                        vol = NULL, meanE = FALSE)
   {
   require(readxl)
 
@@ -167,4 +168,52 @@ arbin_import_raw <- function(file, step.time = TRUE, energy = TRUE, mass = NULL,
   }
 
   return(x)
+}
+#' arbin_import_folder
+#'
+#' This function is a simplified version of arbin_import which does not output a separate
+#' statistics data frame. Consequently the output is a data frame rather than a list.
+#' @param path The folder path, which must include .xls or .xlsx files produced by the arbin.
+#' @param mass Defaults to NULL. A vector including the active masses (in MILLIGRAMS, mg) of all cells in the folder being imported.
+#' Use arbin_import_folder_check to ensure correct order.
+#' @param area Defaults to NULL. A vector including the area (in SQUARE CENTIMETERS, cm^2) of all cells in the folder being imported.
+#' Use arbin_import_folder_check to ensure correct order.
+#' @param vol Defaults to Null. A vector including the volume (in cubic CENTIMETERS, cm^3) of all cells in the folder being imported.
+#' Use arbin_import_folder_check to ensure correct order.
+#' @keywords
+#' @export
+#' @examples
+#' mydataset <- arbin_import_folder(path)
+#' mydataset <- arbin_import_folder()
+arbin_import_folder <- function(path=".",mass=NULL, area=NULL, vol=NULL)
+{
+  initfolder<-getwd()
+  setwd(path)
+  #collect the names of all of the xls,xlsx files in a folder
+  f<-list.files(path=path,pattern=".xls")
+  #Import all the files using arbin import
+  l=lapply(1:length(f),function(x) arbin_import(f[x],mass=mass[x],area=area[x],vol=vol[x]))
+  setwd(initfolder)
+  return(l)
+
+}
+
+#' arbin_import_folder_check
+#'
+#' This function is a simplified version of arbin_import which does not output a separate
+#' statistics data frame. Consequently the output is a data frame rather than a list.
+#' @param path The folder path containing only data files from the arbin, which must end in .xls or .xlsx.
+#' @keywords
+#' @export
+#' @examples
+#' mydataset <- arbin_import_folder(path)
+#' mydataset <- arbin_import_folder()
+arbin_import_folder_check <- function(path=".")
+{
+  initfolder<-getwd()
+  setwd(path)
+  #collect the names of all of the xls,xlsx files in a folder
+  f<-list.files(path=path,pattern=".xls")
+  setwd(initfolder)
+  return(f)
 }
