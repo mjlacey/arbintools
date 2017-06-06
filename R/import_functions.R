@@ -190,7 +190,7 @@ arbin_import_folder <- function(path=".",mass=NULL, area=NULL, vol=NULL)
   initfolder<-getwd()
   setwd(path)
   #collect the names of all of the xls,xlsx files in a folder
-  f<-list.files(path=path,pattern=".xls")
+  f<-list.files(path=path,pattern="(?i).xls")
   #Import all the files using arbin import
   l=lapply(1:length(f),function(x) arbin_import(f[x],mass=mass[x],area=area[x],vol=vol[x]))
   setwd(initfolder)
@@ -213,7 +213,7 @@ arbin_import_folder_check <- function(path=".")
   initfolder<-getwd()
   setwd(path)
   #collect the names of all of the xls,xlsx files in a folder
-  f<-list.files(path=path,pattern=".xls")
+  f<-list.files(path=path,pattern="(?i).xls")
   setwd(initfolder)
   return(f)
 }
