@@ -465,15 +465,15 @@ arbin_Qplot <- function(list, labels, norm=NULL)  {
   }
   if (!is.null(norm))
     #set units for mass normalization
-  {if (norm=="mass" & !is.null(l[[1]]$norm$mass)){
+  {if (norm=="mass" & !is.null(list[[1]]$norm$mass)){
     normunits <- ylab(expression("Q"[discharge] * " / mAh g"^-1 ~ ""))
   }
     #set units for area normalization
-    if (norm=="area" & !is.null(l[[1]]$norm$area)){
+    if (norm=="area" & !is.null(list[[1]]$norm$area)){
       normunits <- ylab(expression("Q"[discharge] * " / mAh cm"^-2 ~ ""))
     }
     #set units for volume normalization
-    if (norm=="vol" & !is.null(l[[1]]$norm$vol)){
+    if (norm=="vol" & !is.null(list[[1]]$norm$vol)){
       normunits <- ylab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
     }
   }
