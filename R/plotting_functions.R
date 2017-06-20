@@ -63,6 +63,10 @@ arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point,
       EE = expression("energy efficiency, E"[d] * " / E"[c]),
       meanE.d = "mean discharge voltage / V",
       meanE.c = "mean charge voltage / V")
+
+    #Do not normalize but convert units from Ah to mAh
+    data$Q.c<-data$Q.c*1e3
+    data$Q.d<-data$Q.d*1e3
   }
   #if normalization is used then set the proper labels
   if (!is.null(norm))
@@ -220,6 +224,10 @@ arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
 
   #Normalize capacity data=========================================
   #normalize capacity data according to desired norm variable for each cell.
+  if (is.null(norm)){
+    plotted.data$Q.d<-plotted.data$Q.d*1e3
+    plotted.data$Q.c<-plotted.data$Q.c*1e3
+  }
   if (!is.null(norm))
   {
     #Perform mass normalization
@@ -342,6 +350,10 @@ arbin_plotvp_multi<-function (list, labels, cycle=1, norm=NULL)
       }
     }
     #normalize discharge capacity data according to desired norm variable for each cell.
+    if (is.null(norm)){
+      df$Q.d<-df$Q.d*1e3
+      df$Q.c<-df$Q.c*1e3
+    }
     if (!is.null(norm))
     {if (norm=="mass" & !is.null(list[[i]]$norm$mass)){
       df$Q.d<-df$Q.d/list[[i]]$norm$mass*1e6
@@ -437,6 +449,9 @@ arbin_Qplot <- function(list, labels, norm=NULL)  {
     df <- stats[[i]]
     #set ident for use in color coding the plot.
     df$ident <- labels[i]
+    if (is.null(norm)){
+      #Change from Ah to mAh if no normalization required
+      df$Q.d<-df$Q.d*1e3}
     if (!is.null(norm))
     {#normalize discharge capacity data according to desired norm variable for each cell.
     if (norm=="mass" & !is.null(list[[i]]$norm$mass)){
