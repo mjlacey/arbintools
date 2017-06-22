@@ -175,13 +175,13 @@ if (is.null(labels)){
 #'
 #' This function takes a data frame of raw data and a specified cycle - or number
 #' of cycles, as a vector - and outputs charge and discharge voltage profiles.
-#' @param data The dataset, which is the list as outputted by arbin_import.
-#' @param cycles The cycles to be plotted, expressed as a vector. Defaults to first cycle.
-#' @param norm character string used to select how to normalize your data: "mass", "area", "vol". Deaults to Null and plots absolute capacity.
+#' @param data The dataset, which is the list as output by arbin_import.
+#' @param cycles The cycles to be plotted, expressed as a vector. Defaults to cycle = 1.
+#' @param norm character string used to select how to normalize your data: "mass", "area", "vol". Deaults to Null which plots absolute capacity.
 #' @keywords
 #' @export
 #' @examples
-#' arbin_plotvp(mydataset, 1)
+#' arbin_plotvp(mydataset, cycles=1)
 #' arbin_plotvp(mydataset, cycles = c(1,5,10), norm="mass")
 
 arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
@@ -251,20 +251,20 @@ arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
   normunits<-NULL
   #set units for no normalization
   if (is.null(norm)){
-    normunits <- xlab(expression("Q"[discharge] * " / mAh"))
+    normunits <- xlab(expression("Capacity" * " / mAh"))
   }
   if (!is.null(norm))
     #set units for mass normalization
   {if (norm=="mass" & !is.null(data$norm$mass)){
-    normunits <- xlab(expression("Q"[discharge] * " / mAh g"^-1 ~ ""))
+    normunits <- xlab(expression("Specific Capacity" * " / mAh g"^-1 ~ ""))
   }
     #set units for area normalization
     if (norm=="area" & !is.null(data$norm$area)){
-      normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-2 ~ ""))
+      normunits <- xlab(expression("Areal Capacity" * " / mAh cm"^-2 ~ ""))
     }
     #set units for volume normalization
     if (norm=="vol" & !is.null(data$norm$vol)){
-      normunits <- xlab(expression("Q"[discharge] * " / mAh cm"^-3 ~ ""))
+      normunits <- xlab(expression("Volumetric Capacity" * " / mAh cm"^-3 ~ ""))
     }
   }
 
@@ -277,7 +277,7 @@ arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
     geom_path(aes(x = Q.d, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
     geom_path(aes(x = Q.c, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
     normunits +
-    ylab("cell voltage / V") +
+    ylab("Cell Voltage / V") +
     guides(color = guide_legend(title = "cycle"))
 
   # If scales and grid are installed, then a custom theme is added.
