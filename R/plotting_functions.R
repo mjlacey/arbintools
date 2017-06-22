@@ -16,13 +16,13 @@
 #' @param y The variable to be plotted on the y-axis
 #' @param norm character string used to select how to normalize your data: "mass", "area", "vol".
 #' @param geom The geom to be passed to ggplot; e.g. geom_point or geom_path
-#' @param size The size of the geom.
+#' @param size The size of the geom. Default size =4.
 #' @keywords
 #' @export
 #' @examples
-#' arbin_quickplot(list, x = t, y = E)
-#' arbin_quickplot(list, x = t, y = E, norm="mass", geom = geom_path, size = 1)
-#' arbin_quickplot(list, x = cyc.n, y = d.Q, norm="area")
+#' arbin_quickplot(list, x = "t", y = "E")
+#' arbin_quickplot(list, x = "t", y = "E", norm="mass", geom = geom_path, size = 1)
+#' arbin_quickplot(list, x = "cyc.n", y = "Q.d" , norm="area")
 
 arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point, size = 4) {
   require(ggplot2)
