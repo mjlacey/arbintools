@@ -14,7 +14,7 @@
 #' aggregating the statistics dataset.
 #' @param mass Defaults to NULL. If an active material mass is specified - in MILLIGRAMS, mg - it is stored
 #' in the norm parameter for normalization options during plotting.
-#' @param area Defaults to NULL. If an electrode area is specified - in CENTIMETERS, cm^3 - it is stored
+#' @param area Defaults to NULL. If an electrode area is specified - in SQUARE CENTIMETERS, cm^2 - it is stored
 #' in the norm parameter for normalization options during plotting.
 #' @param vol Defaults to NULL. If an active material volume is specified - in CUBIC CENTIMETERS, cm^3 - it is stored
 #' in the norm parameter for normalization options during plotting.
@@ -24,7 +24,8 @@
 #' @export
 #' @examples
 #' mydataset <- arbin_import("dataset.xlsx")
-#' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55)
+#' mydataset <- arbin_import("dataset.xlsx", step.time = FALSE, cycles = 200, mass = 2.55, area=1.267)
+#' Batch import of multiple cells from list, useful for Qplot, plotvp_multi, dQdV_multi, etc.
 #' l=lapply(1:length(cellfile),function(x) arbinimport(cellfile[x],cycles=100,mass=mass[x]))
 
 arbin_import<-function (file, step.time = TRUE, energy = TRUE, cycles = 100, mass = NULL, area = NULL ,
