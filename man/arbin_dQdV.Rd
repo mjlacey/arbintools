@@ -4,12 +4,12 @@
 \alias{arbin_dQdV}
 \title{arbin_dQdV}
 \usage{
-arbin_dQdV(list, title = NULL, cycle = 1, ymin = -0.1, ymax = 1)
+arbin_dQdV(list, title = NULL, cycle = 1, ymin = -0.1, ymax = 0.1)
 }
 \arguments{
 \item{list}{list of data generated from arbinimport script.}
 
-\item{title}{input legend for the plot}
+\item{title}{Character vector to use for the title of the plot. Defaults to NULL.}
 
 \item{cycle}{number of the cycle of interest, defaults to 1}
 

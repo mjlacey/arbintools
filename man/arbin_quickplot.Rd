@@ -4,7 +4,7 @@
 \alias{arbin_quickplot}
 \title{arbin_quickplot}
 \usage{
-arbin_quickplot(l, x = "cyc.n", y = "Q.d", norm = NULL,
+arbin_quickplot(l, x = "cyc.n", y = "Q.d", norm = NULL, title = NULL,
   geom = geom_point, size = 4)
 }
 \arguments{
@@ -13,6 +13,8 @@ arbin_quickplot(l, x = "cyc.n", y = "Q.d", norm = NULL,
 \item{y}{The variable to be plotted on the y-axis}
 
 \item{norm}{character string used to select how to normalize your data: "mass", "area", "vol".}
+
+\item{title}{Character vector to use for the title of the plot. Defaults to NULL.}
 
 \item{geom}{The geom to be passed to ggplot; e.g. geom_point or geom_path}
 

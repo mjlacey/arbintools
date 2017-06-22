@@ -15,6 +15,7 @@
 #' @param x The variable to be plotted on the x-axis
 #' @param y The variable to be plotted on the y-axis
 #' @param norm character string used to select how to normalize your data: "mass", "area", "vol".
+#' @param title Character vector to use for the title of the plot. Defaults to NULL.
 #' @param geom The geom to be passed to ggplot; e.g. geom_point or geom_path
 #' @param size The size of the geom. Default size =4.
 #' @keywords
@@ -24,7 +25,7 @@
 #' arbin_quickplot(list, x = "t", y = "E", norm="mass", geom = geom_path, size = 1)
 #' arbin_quickplot(list, x = "cyc.n", y = "Q.d" , norm="area")
 
-arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, geom = geom_point, size = 4) {
+arbin_quickplot<- function (l, x="cyc.n", y="Q.d", norm=NULL, title=NULL, geom = geom_point, size = 4) {
   require(ggplot2)
   require(scales)
   require(grid)
@@ -144,7 +145,7 @@ if (is.null(labels)){
   p <- ggplot(data) + geom(aes_string(x = x, y = y), size = size)
 
   # Labels looked up from the list of labels. ========================
-  p <- p + xlab(labels[[x]]) + ylab(labels[[y]])
+  p <- p + xlab(labels[[x]]) + ylab(labels[[y]])+labs(title=title)
 
   # If scales and grid are installed, then a custom theme is added.
   # This does not seem to work as I thought so it's cut out for now, and scales
@@ -178,13 +179,14 @@ if (is.null(labels)){
 #' @param data The dataset, which is the list as output by arbin_import.
 #' @param cycles The cycles to be plotted, expressed as a vector. Defaults to cycle = 1.
 #' @param norm character string used to select how to normalize your data: "mass", "area", "vol". Deaults to Null which plots absolute capacity.
+#' @param title Character vector to use for the title of the plot. Defaults to NULL.
 #' @keywords
 #' @export
 #' @examples
 #' arbin_plotvp(mydataset, cycles=1)
 #' arbin_plotvp(mydataset, cycles = c(1,5,10), norm="mass")
 
-arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
+arbin_plotvp <- function(data, cycles=1, norm=NULL, title=NULL)  {
 
   require(ggplot2)
   require(scales)
@@ -276,8 +278,7 @@ arbin_plotvp <- function(data, cycles=1, norm=NULL)  {
   p <- ggplot(plotted.data) +
     geom_path(aes(x = Q.d, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
     geom_path(aes(x = Q.c, y = E, color = factor(cyc.n), group = factor(cyc.n)), size = 1) +
-    normunits +
-    ylab("Cell Voltage / V") +
+    normunits + ylab("Cell Voltage / V") + labs(title=title)+
     guides(color = guide_legend(title = "cycle"))
 
   # If scales and grid are installed, then a custom theme is added.
@@ -527,14 +528,14 @@ arbin_Qplot <- function(list, labels, norm=NULL)  {
 #' Plot differential capacity plots (dQ/dV) for one cell at one cycle.
 #'
 #' @param list list of data generated from arbinimport script.
-#' @param title input legend for the plot
+#' @param title Character vector to use for the title of the plot. Defaults to NULL.
 #' @param cycle number of the cycle of interest, defaults to 1
 #' @param ymin set ploting window range, defaults to 0.1
 #' @param ymax set ploting window range, defaults to 1
 #' @export
 #' @examples
 #' arbin_dQdV(list,cellfile,1,ymin,ymax)
-arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=-0.1,ymax=1)
+arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=-0.1,ymax=0.1)
 {
   require(ggplot2)
   require(scales)

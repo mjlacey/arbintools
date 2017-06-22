@@ -4,7 +4,7 @@
 \alias{arbin_plotvp}
 \title{arbin_plotvp}
 \usage{
-arbin_plotvp(data, cycles = 1, norm = NULL)
+arbin_plotvp(data, cycles = 1, norm = NULL, title = NULL)
 }
 \arguments{
 \item{data}{The dataset, which is the list as output by arbin_import.}
@@ -12,6 +12,8 @@ arbin_plotvp(data, cycles = 1, norm = NULL)
 \item{cycles}{The cycles to be plotted, expressed as a vector. Defaults to cycle = 1.}
 
 \item{norm}{character string used to select how to normalize your data: "mass", "area", "vol". Deaults to Null which plots absolute capacity.}
+
+\item{title}{Character vector to use for the title of the plot. Defaults to NULL.}
 }
 \description{
 This function takes a data frame of raw data and a specified cycle - or number
