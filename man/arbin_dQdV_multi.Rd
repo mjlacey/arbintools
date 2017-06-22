@@ -4,7 +4,7 @@
 \alias{arbin_dQdV_multi}
 \title{arbin_dQdV_multi}
 \usage{
-arbin_dQdV_multi(list, label, cycle = 1, ymin = -1, ymax = 1)
+arbin_dQdV_multi(list, label, cycle = 1, ymin = NULL, ymax = NULL)
 }
 \arguments{
 \item{list}{list of data generated from arbinimport script.}
@@ -13,13 +13,13 @@ arbin_dQdV_multi(list, label, cycle = 1, ymin = -1, ymax = 1)
 
 \item{cycle}{Number of the cycle of interest, default is cycle=1}
 
-\item{ymin}{set ploting window range for the dQ/dV axis, default is -1000}
+\item{ymin}{set ploting window range for the dQ/dV axis, defaults to NULL which uses the minimum value. May need to be adjusted manually to avoid outliers.}
 
-\item{ymax}{set ploting window range for the dQ/dV axis, default is 1500}
+\item{ymax}{set ploting window range for the dQ/dV axis, defaults to NULL which uses the maximum value. May need to be adjusted manually to avoid outliers.}
 }
 \description{
 Compare differential capacity plots from different cells, same cycle. .
 }
 \examples{
-arbin_dQdV_multi(l,title=c("Cell1", "Cell2","Cell3"),cycle=1,ymin=-1000,ymax=1500)
+arbin_dQdV_multi(l,title=c("Cell1", "Cell2","Cell3"),cycle=1,ymin=-0.01,ymax=0.01)
 }

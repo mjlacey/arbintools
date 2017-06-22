@@ -4,7 +4,7 @@
 \alias{arbin_dQdV}
 \title{arbin_dQdV}
 \usage{
-arbin_dQdV(list, title = NULL, cycle = 1, ymin = -0.1, ymax = 0.1)
+arbin_dQdV(list, title = NULL, cycle = 1, ymin = NULL, ymax = NULL)
 }
 \arguments{
 \item{list}{list of data generated from arbinimport script.}
@@ -13,9 +13,9 @@ arbin_dQdV(list, title = NULL, cycle = 1, ymin = -0.1, ymax = 0.1)
 
 \item{cycle}{number of the cycle of interest, defaults to 1}
 
-\item{ymin}{set ploting window range, defaults to 0.1}
+\item{ymin}{set ploting window range, defaults to NULL which uses the minimum value. May need to be adjusted manually to avoid outliers.}
 
-\item{ymax}{set ploting window range, defaults to 1}
+\item{ymax}{set ploting window range, defaults to NULL which uses the maximum value. May need to be adjusted manually to avoid outliers.}
 }
 \description{
 Plot differential capacity plots (dQ/dV) for one cell at one cycle.

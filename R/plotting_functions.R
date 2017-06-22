@@ -530,12 +530,12 @@ arbin_Qplot <- function(list, labels, norm=NULL)  {
 #' @param list list of data generated from arbinimport script.
 #' @param title Character vector to use for the title of the plot. Defaults to NULL.
 #' @param cycle number of the cycle of interest, defaults to 1
-#' @param ymin set ploting window range, defaults to 0.1
-#' @param ymax set ploting window range, defaults to 1
+#' @param ymin set ploting window range, defaults to NULL which uses the minimum value. May need to be adjusted manually to avoid outliers.
+#' @param ymax set ploting window range, defaults to NULL which uses the maximum value. May need to be adjusted manually to avoid outliers.
 #' @export
 #' @examples
 #' arbin_dQdV(list,cellfile,1,ymin,ymax)
-arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=-0.1,ymax=0.1)
+arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=NULL,ymax=NULL)
 {
   require(ggplot2)
   require(scales)
@@ -573,9 +573,15 @@ arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=-0.1,ymax=0.1)
     theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
     theme(axis.text.y = element_text(margin = margin(0,0.5, 0, 0.2, "cm"))) +
     theme(panel.grid.major = element_line(size = 0.5))
-
   #Y axis is made to be continuous with limits set using ymin and ymax=========
-  p <- p + scale_y_continuous(limits = c(ymin, ymax))
+  #if no set values, use autoscale to min and mix values
+  if (is.null(ymin)|is.null(ymax)){
+    p <- p + scale_y_continuous(limits = c(min(df$dQdV), max(df$dQdV)))
+  }
+
+  if (!is.null(ymin)&!is.null(ymax)){
+    p <- p + scale_y_continuous(limits = c(ymin, ymax))
+  }
   return(p)
 }
 
@@ -586,12 +592,12 @@ arbin_dQdV<-function (list,title=NULL,cycle=1,ymin=-0.1,ymax=0.1)
 #' @param list list of data generated from arbinimport script.
 #' @param label character vector containing the legend for each Cell for the legend
 #' @param cycle Number of the cycle of interest, default is cycle=1
-#' @param ymin set ploting window range for the dQ/dV axis, default is -1000
-#' @param ymax set ploting window range for the dQ/dV axis, default is 1500
+#' @param ymin set ploting window range for the dQ/dV axis, defaults to NULL which uses the minimum value. May need to be adjusted manually to avoid outliers.
+#' @param ymax set ploting window range for the dQ/dV axis, defaults to NULL which uses the maximum value. May need to be adjusted manually to avoid outliers.
 #' @export
 #' @examples
-#' arbin_dQdV_multi(l,title=c("Cell1", "Cell2","Cell3"),cycle=1,ymin=-1000,ymax=1500)
-arbin_dQdV_multi<-function (list,label,cycle=1,ymin=-1,ymax=1)
+#' arbin_dQdV_multi(l,title=c("Cell1", "Cell2","Cell3"),cycle=1,ymin=-0.01,ymax=0.01)
+arbin_dQdV_multi<-function (list,label,cycle=1,ymin=NULL,ymax=NULL)
 {
   require(ggplot2)
   require(scales)
@@ -630,10 +636,17 @@ arbin_dQdV_multi<-function (list,label,cycle=1,ymin=-1,ymax=1)
     theme(axis.ticks.length = unit(-0.25, "cm")) +
     theme(axis.text.x = element_text(margin = margin(0.5, 0, 0.2, 0, "cm"))) +
     theme(axis.text.y = element_text(margin = margin(0,0.5, 0, 0.2, "cm"))) +
-    theme(panel.grid.major = element_line(size = 0.5))+
-
+    theme(panel.grid.major = element_line(size = 0.5))
     #Y axis is made to be continuous with limits set using ymin and ymax=========
-    scale_y_continuous(limits = c(ymin, ymax))
+  #if no set values, use autoscale to min and mix values
+  if (is.null(ymin)|is.null(ymax)){
+    p <- p + scale_y_continuous(limits = c(min(stats$dQdV), max(stats$dQdV)))
+  }
+
+  if (!is.null(ymin)&!is.null(ymax)){
+    p <- p + scale_y_continuous(limits = c(ymin, ymax))
+  }
+
   return(p)
 }
 
